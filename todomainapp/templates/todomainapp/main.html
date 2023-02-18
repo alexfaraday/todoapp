@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script
+  src="https://code.jquery.com/jquery-3.6.3.js"
+  integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
+  crossorigin="anonymous"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+
+
+
+</head>
+<body>
+{% csrf_token %}
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+
+<div class="row d-flex justify-content-center container">
+    <div class="col-md-8">
+      <div class="card-hover-shadow-2x mb-3 card">
+        <div class="card-header-tab card-header">
+          <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
+              class="fa fa-tasks"></i>&nbsp;Task Lists</div>
+
+        </div>
+        <div class="scroll-area-sm">
+          <perfect-scrollbar class="ps-show-limits">
+            <div style="position: static;" class="ps ps--active-y">
+              <div class="ps-content">
+                <ul class=" list-group list-group-flush">
+                            {% for p in object_list %}
+                  <li class="list-group-item">
+                    <div class="todo-indicator bg-warning"></div>
+                    <div class="widget-content p-0">
+                      <div class="widget-content-wrapper">
+                        <div class="widget-content-left mr-2">
+                          <div class="custom-checkbox custom-control">
+                              {% if p.taskenddate is None %}
+                            <input class="custom-control-input donebutton"
+                              id="done{{p.id}}" type="checkbox">
+                              {% else %}
+                               <input class="custom-control-input donebutton" checked
+                              id="done{{p.id}}" type="checkbox">
+                              {% endif %}
+
+
+
+                              <label class="custom-control-label"
+                              for="exampleCustomCheckbox12">&nbsp;</label>
+                            </div>
+                        </div>
+                        <div class="widget-content-left">
+                          <div class="widget-heading">{{p.taskname}} <div class="badge badge-danger ml-2">Rejected</div>
+                          </div>
+                          <div class="widget-subheading">Дата создания <i>{{p.taskcreatedate}}</i></div>
+                                                   {% if p.taskenddate %}   <div class="widget-subheading">Дата завершения <i>{{p.taskenddate}}</i></div> {% endif %}
+
+                        </div>
+                      <div class="widget-content-right justify-content-end">
+                          <a href="/updatetask/{{p.id}}"> <button class="border-0 btn-transition btn btn-outline-success">
+                       <i class="fa fa-pencil-square-o"></i></button></a>
+                <a href="/taskdelete/{{p.id}}">           <button id="task{{p.id}}" class="border-0 btn-transition btn btn-outline-danger delbutton">
+                         <i class="fa fa-trash"></i>
+
+                        </button></a>
+                      </div>
+                      </div>
+                    </div>
+                  </li>
+                     {% endfor %}
+
+                </ul>
+              </div>
+
+            </div>
+          </perfect-scrollbar>
+        </div>
+        <div class="d-block text-right card-footer"><button class="mr-2 btn btn-link btn-sm">Cancel</button>
+        <a href="/addtask">  <button class="btn btn-primary">Add Task</button></a></div>
+      </div>
+    </div>
+    </div>
+
+<script> $(".delbutton").click( function(){
+
+
+
+
+
+ } );
+
+$('.donebutton').click(function(){
+
+taskid=$(this).attr('id').substr(4)
+
+
+	if ($(this).is(':checked')){
+$.ajax({
+	url: '/taskupdatestatus/',         /* Куда пойдет запрос */
+	method: 'post',             /* Метод передачи (post или get) */
+	data: {id: taskid, action: 2},     /* Параметры передаваемые в запросе. */
+	success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+location.reload();
+
+	}
+});
+	} else {
+
+	$.ajax({
+	url: '/taskupdatestatus/',         /* Куда пойдет запрос */
+	method: 'post',             /* Метод передачи (post или get) */
+	data: {id: taskid, action: 1},     /* Параметры передаваемые в запросе. */
+	success: function(data){   /* функция которая будет выполнена после успешного запроса.  */
+location.reload();
+
+	}
+});
+
+	}
+});
+
+
+</script>
+
+<script>
+ 	   	function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+</script>

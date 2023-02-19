@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class TodomainappConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'todomainapp'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "todomainapp"

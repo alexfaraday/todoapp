@@ -13,20 +13,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
 from django.urls import path
-from django.views.generic import TemplateView
-from todomainapp.views import hometasksList, newhometask,taskdetail,taskupdate,taskdelete,taskupdatestatus
-
+from todomainapp.views import (
+    hometasksList,
+    newhometask,
+    taskdetail,
+    taskupdate,
+    taskdelete,
+    taskupdatestatus,
+)
 
 urlpatterns = [
-path('', hometasksList.as_view(), name='tasklist'),
-path('addtask/', newhometask.as_view(), name='newtask'),
-path('taskdetail/<int:taskid>', taskdetail.as_view(), name='taskdetail'),
-path('updatetask/<int:taskid>', taskupdate.as_view(), name='updatetask'),
-path('taskdelete/<int:taskid>', taskdelete.as_view(), name='taskdelete'),
-path('taskupdatestatus/', taskupdatestatus.as_view(), name='taskupdatestatus'),
-
-
-
+    path("", hometasksList.as_view(), name="tasklist"),
+    path("addtask/", newhometask.as_view(), name="newtask"),
+    path("taskdetail/<int:taskid>", taskdetail.as_view(), name="taskdetail"),
+    path("updatetask/<int:taskid>", taskupdate.as_view(), name="updatetask"),
+    path("taskdelete/<int:taskid>", taskdelete.as_view(), name="taskdelete"),
+    path("taskupdatestatus/", taskupdatestatus.as_view(), name="taskupdatestatus"),
 ]

@@ -5,6 +5,7 @@ from django.urls import reverse # Новый импорт
 
 class hometasks(models.Model):
     taskname = models.CharField(max_length=150,blank=True,null=True )
+    taskdescription = models.CharField(max_length=150,blank=True,null=True )
     taskenddate = models.DateTimeField( null=True)
     taskcreatedate = models.DateTimeField(default=timezone.now, null=True)
     taskstatus=models.IntegerField(default=1, blank=True,null=True)

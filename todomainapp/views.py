@@ -16,9 +16,6 @@ class hometasksList(ListView):
     model = hometasks
     template_name="todomainapp/main.html"
 
-   # def get_queryset(self):
-    #    return hometasks.objects.filter(taskstatus='1')
-
 
 class newhometask(CreateView):
     def get(self, request, *args, **kwargs):
@@ -34,11 +31,10 @@ class newhometask(CreateView):
         form=addnewtask(request.POST)
         if form.is_valid():
             form.save()
-            print(form.cleaned_data)
         return redirect('/' )
 
-    #def get_queryset(self):
-     #   return hometasks.objects.filter(taskstatus='1')
+
+
 
 class taskdetail(DetailView):
     model=hometasks
@@ -51,25 +47,12 @@ class taskdetail(DetailView):
 
 class taskupdate(UpdateView):
     model=hometasks
-    fields=['taskname']
+    fields=['taskname', 'taskdescription']
     template_name_suffix = '_update_form'
 
 
     pk_url_kwarg='taskid'
     template_name="todomainapp/taskupdate.html"
-
-
-    #def get(self, request):
-     #   return redirect('/')
-
-  #  def post(self, request, taskid):
-   #     form=addnewtask(request.POST)
-    #    if form.is_valid():
-     #       form.save()
-      #      print(form.cleaned_data)
-    #return redirect('/' )
-
-
 
 
 class taskdelete(DeleteView):
@@ -89,19 +72,20 @@ class taskdelete(DeleteView):
 class taskupdatestatus(UpdateView):
     model = hometasks
     fields = ['taskname', 'taskenddate']
+
     def post(self, request,):
         if request.POST['action']=='1':
             taskedit = hometasks.objects.get(id=request.POST['id'])
             taskedit.taskstatus = request.POST['action']
             taskedit.taskenddate=None
             taskedit.save()
-            print(taskedit)
+
         else:
             taskedit = hometasks.objects.get(id=request.POST['id'])
             taskedit.taskstatus = request.POST['action']
             taskedit.taskenddate=datetime.now()
             taskedit.save()
-          #  print(taskedit)
+
 
 
 

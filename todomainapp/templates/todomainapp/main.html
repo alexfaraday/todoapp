@@ -25,9 +25,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/boxicons/2.1.0/css/boxicons.min.css" integrity="sha512-pVCM5+SN2+qwj36KonHToF2p1oIvoU3bsqxphdOIWMYmgr4ZqD3t5DjKvvetKhXGc/ZG5REYTT6ltKfExEei/Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
-
-<div class="row d-flex justify-content-center container">
-    <div class="col-md-8">
+<br>
+<br>
+<div class="row  justify-content-center  container">
+    <div class="col-md-2"></div>
+    <div class="col-md-8 justify-content-center center-block">
       <div class="card-hover-shadow-2x mb-3 card">
         <div class="card-header-tab card-header">
           <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i
@@ -47,10 +49,10 @@
                         <div class="widget-content-left mr-2">
                           <div class="custom-checkbox custom-control">
                               {% if p.taskenddate is None %}
-                            <input class="custom-control-input donebutton"
+                            <input class="form-check-input donebutton"
                               id="done{{p.id}}" type="checkbox">
                               {% else %}
-                               <input class="custom-control-input donebutton" checked
+                               <input class="form-check-input donebutton" checked
                               id="done{{p.id}}" type="checkbox">
                               {% endif %}
 
@@ -61,8 +63,19 @@
                             </div>
                         </div>
                         <div class="widget-content-left">
-                          <div class="widget-heading">{{p.taskname}} <div class="badge badge-danger ml-2">Rejected</div>
+                             {% if p.taskenddate %}
+                         <a href="/taskdetail/{{p.id}}" style="text-decoration:line-through	"> <div class="widget-heading">{{p.taskname}} <div class="badge badge-danger ml-2">Rejected</div></a>
+                             {% else %}
+                                                     <a href="/taskdetail/{{p.id}}" > <div class="widget-heading">{{p.taskname}} <div class="badge badge-danger ml-2">Rejected</div></a>
+
+
+                            {% endif %}
+
                           </div>
+                          <br>
+                          <p>{{p.taskdescription}}</p>
+                           <br>
+
                           <div class="widget-subheading">Дата создания <i>{{p.taskcreatedate}}</i></div>
                                                    {% if p.taskenddate %}   <div class="widget-subheading">Дата завершения <i>{{p.taskenddate}}</i></div> {% endif %}
 
@@ -87,11 +100,16 @@
           </perfect-scrollbar>
         </div>
         <div class="d-block text-right card-footer">
-        <a href="/addtask">  <button class="btn btn-primary">Добавить задачу</button></a></div>
+        <a href="/addtask">  <button class="btn btn-primary">Добавить задачу</button></a>
+
+           <a href="/admin">  <button class="btn btn-info">В админ панель</button></a></div>
       </div>
     </div>
     </div>
-
+  <div class="col-md-2"></div>
+<br>
+<br>
+</body>
 <script> $(".delbutton").click( function(){
 
 

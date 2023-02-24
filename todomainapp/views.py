@@ -1,11 +1,15 @@
 import sys
 from datetime import datetime
-
+from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-
-sys.setrecursionlimit(1500)
-
+from .serializers import TasksSerializer
+import django_filters.rest_framework
+from django_filters.rest_framework import DjangoFilterBackend, OrderingFilter
+from rest_framework import filters
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from .forms import *
 
 from django.views.generic import (
@@ -90,3 +94,43 @@ class taskupdatestatus(UpdateView):
             taskedit.save()
 
         return HttpResponse("html")
+
+
+class TaskPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = "page_size"
+    max_page_size = 20
+
+
+class TaskAPIView(generics.ListAPIView):
+    queryset = hometasks.objects.all()
+    serializer_class = TasksSerializer
+    pagination_class = TaskPagination
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    ordering_fields = ["taskstatus", "taskcreatedate"]
+    filterset_fields = ["taskname", "taskstatus"]
+
+    def get_queryset(self):
+        pk = self.kwargs.get("pk")
+        if not pk:
+            return hometasks.objects.all()
+        return hometasks.objects.filter(pk=pk)
+
+    def post(self, request):
+        serializer = TasksSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
+
+
+class TaskEditAPIView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = hometasks.objects.all()
+    serializer_class = TasksSerializer
+
+
+class createTaskAPIView(APIView):
+    def post(self, request):
+        serializer = TasksSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"post": serializer.data})
